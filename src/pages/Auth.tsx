@@ -35,9 +35,9 @@ const Auth = () => {
   const navigate = useNavigate();
   const isLoginPage = location.pathname === '/login' || location.pathname === '/auth/login';
   const defaultTab = isLoginPage ? 'login' : 'register';
+  const [activeTab, setActiveTab] = useState(defaultTab);
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [showForgotModal, setShowForgotModal] = useState(false);
-
 
   const loginForm = useForm<AuthFormValues>();
   const registerForm = useForm<AuthFormValues>({
@@ -65,6 +65,7 @@ const Auth = () => {
   };
 
   const handleTabChange = (value) => {
+    setActiveTab(value);
     if (value === 'login') {
       navigate('/auth/login', { replace: true });
     } else {
@@ -129,6 +130,7 @@ const Auth = () => {
             defaultValue={defaultTab} 
             className="w-full"
             onValueChange={handleTabChange}
+            value={activeTab}
           >
             <TabsList className="grid w-full grid-cols-2 rounded-none">
               <TabsTrigger 
@@ -196,15 +198,15 @@ const Auth = () => {
                             <div className="flex justify-between items-center">
                               <FormLabel>Password</FormLabel>
                              <Link
-  to="#"
-  onClick={(e) => {
-    e.preventDefault();
-    setShowForgotModal(true);
-  }}
-  className="text-xs text-purple-600 hover:text-purple-800 transition-colors"
->
-  Forgot password?
-</Link>
+                                to="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setShowForgotModal(true);
+                                }}
+                                className="text-xs text-purple-600 hover:text-purple-800 transition-colors"
+                              >
+                                Forgot password?
+                              </Link>
                             </div>
                             <FormControl>
                               <div className="relative group">
@@ -239,27 +241,34 @@ const Auth = () => {
               <CardFooter className="flex justify-center border-t border-slate-200 dark:border-slate-700 py-4">
                 <p className="text-sm text-muted-foreground">
                   Don't have an account?{" "}
-                  <Link to="/auth/register" className="text-purple-600 hover:text-purple-800 font-medium hover:underline transition-colors">
+                  <a 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleTabChange('register');
+                    }}
+                    className="text-purple-600 hover:text-purple-800 font-medium hover:underline transition-colors"
+                  >
                     Create one now
-                  </Link>
+                  </a>
                 </p>
               </CardFooter>
             </TabsContent>
             {showForgotModal && (
-  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg max-w-md w-full">
-      <h2 className="text-lg font-semibold mb-2 text-purple-600">Forgot Password</h2>
-      <p className="text-sm text-gray-700 dark:text-gray-200">
-        Please contact admin at <a href="mailto:decodecoahelp@gmail.com" className="text-purple-600 underline">decodecoahelp@gmail.com</a> to reset your password.
-      </p>
-      <div className="mt-4 flex justify-end">
-        <Button onClick={() => setShowForgotModal(false)} className="bg-purple-600 text-white hover:bg-purple-700">
-          Close
-        </Button>
-      </div>
-    </div>
-  </div>
-)}
+              <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg max-w-md w-full">
+                  <h2 className="text-lg font-semibold mb-2 text-purple-600">Forgot Password</h2>
+                  <p className="text-sm text-gray-700 dark:text-gray-200">
+                    Please contact admin at <a href="mailto:decodecoahelp@gmail.com" className="text-purple-600 underline">decodecoahelp@gmail.com</a> to reset your password.
+                  </p>
+                  <div className="mt-4 flex justify-end">
+                    <Button onClick={() => setShowForgotModal(false)} className="bg-purple-600 text-white hover:bg-purple-700">
+                      Close
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
             <TabsContent value="register" className="animate-in slide-in-from-right duration-300">
               <CardHeader>
                 <CardTitle className="text-2xl">Create an Account</CardTitle>
@@ -452,9 +461,16 @@ const Auth = () => {
               <CardFooter className="flex justify-center border-t border-slate-200 dark:border-slate-700 py-4">
                 <p className="text-sm text-muted-foreground">
                   Already have an account?{" "}
-                  <Link to="/auth/login" className="text-purple-600 hover:text-purple-800 font-medium hover:underline transition-colors">
+                  <a 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleTabChange('login');
+                    }}
+                    className="text-purple-600 hover:text-purple-800 font-medium hover:underline transition-colors"
+                  >
                     Sign in
-                  </Link>
+                  </a>
                 </p>
               </CardFooter>
             </TabsContent>

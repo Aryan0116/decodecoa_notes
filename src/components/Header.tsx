@@ -80,9 +80,7 @@ const Header = () => {
         <div className="flex items-center gap-2 sm:gap-4">
           {/* Visit DecodeCOA button with animation - Hidden on small screens */}
           <a 
-            href="https://www.decodecoa.com" 
-            target="_blank" 
-            rel="noopener noreferrer" 
+            href="https://aryan0116.github.io/DECODE-CO-A/" 
             className="hidden sm:flex bg-white/10 hover:bg-white/20 transition-all duration-300 px-3 py-1.5 rounded-full text-sm items-center gap-1 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
           >
             <span className="font-medium">Visit</span>

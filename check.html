@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #6c757d;
+        }
+
+        .nav-tab.active {
+            background: white;
+            color: #4facfe;
+            border-bottom: 3px solid #4facfe;
+        }
+
+        .nav-tab:hover {
+            background: #e9ecef;
+            color: #4facfe;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(238, 90, 82, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #51cf66 0%, #40c057 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(64, 192, 87, 0.3);
+        }
+
+        .employee-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .employee-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .employee-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            border-color: #4facfe;
+        }
+
+        .employee-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .employee-card p {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .employee-card .actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+
+        .salary-slip {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 2px solid #4facfe;
+        }
+
+        .salary-slip h2 {
+            text-align: center;
+            color: #4facfe;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .salary-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .salary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .salary-row.total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #4facfe;
+            border-top: 2px solid #4facfe;
+            margin-top: 10px;
+        }
+
+        .leave-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #4facfe;
+        }
+
+        .leave-status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .leave-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .leave-status.approved {
+            background: #d1edff;
+            color: #0c5460;
+        }
+
+        .leave-status.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background-color: #d1edff;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .salary-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .employee-card .actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Employee Management System</h1>
+            <p>Manage your workforce efficiently</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+            <button class="nav-tab" data-tab="employees">Employees</button>
+            <button class="nav-tab" data-tab="salary">Salary</button>
+            <button class="nav-tab" data-tab="leaves">Leave Management</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <h2>Dashboard</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="totalEmployees">0</h3>
+                    <p>Total Employees</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalSalary">₹0</h3>
+                    <p>Total Monthly Salary</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="pendingLeaves">0</h3>
+                    <p>Pending Leaves</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="activeEmployees">0</h3>
+                    <p>Active Employees</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employees Tab -->
+        <div id="employees" class="tab-content">
+            <h2>Employee Management</h2>
+            
+            <div class="form-grid">
+                <div>
+                    <h3>Add New Employee</h3>
+                    <form id="employeeForm">
+                        <div class="form-group">
+                            <label for="empName">Full Name</label>
+                            <input type="text" id="empName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="empEmail">Email</label>
+                            <input type="email" id="empEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="empPhone">Phone</label>
+                            <input type="tel" id="empPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="empDepartment">Department</label>
+                            <select id="empDepartment" required>
+                                <option value="">Select Department</option>
+                                <option value="IT">IT</option>
+                                <option value="HR">HR</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Operations">Operations</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="empPosition">Position</label>
+                            <input type="text" id="empPosition" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="empSalary">Monthly Salary (₹)</label>
+                            <input type="number" id="empSalary" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="empJoinDate">Join Date</label>
+                            <input type="date" id="empJoinDate" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Employee</button>
+                    </form>
+                </div>
+            </div>
+
+            <div>
+                <h3>Employee List</h3>
+                <input type="text" id="searchEmployee" class="search-bar" placeholder="Search employees...">
+                <div id="employeeList" class="employee-grid"></div>
+            </div>
+        </div>
+
+        <!-- Salary Tab -->
+        <div id="salary" class="tab-content">
+            <h2>Salary Management</h2>
+            
+            <div class="form-grid">
+                <div>
+                    <h3>Generate Salary Slip</h3>
+                    <div class="form-group">
+                        <label for="salaryEmployee">Select Employee</label>
+                        <select id="salaryEmployee" required>
+                            <option value="">Select Employee</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="salaryMonth">Month</label>
+                        <input type="month" id="salaryMonth" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="basicSalary">Basic Salary (₹)</label>
+                        <input type="number" id="basicSalary" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="allowances">Allowances (₹)</label>
+                        <input type="number" id="allowances" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="deductions">Deductions (₹)</label>
+                        <input type="number" id="deductions" value="0">
+                    </div>
+                    <button type="button" id="generateSlip" class="btn btn-primary">Generate Salary Slip</button>
+                </div>
+            </div>
+
+            <div id="salarySlipContainer"></div>
+        </div>
+
+        <!-- Leaves Tab -->
+        <div id="leaves" class="tab-content">
+            <h2>Leave Management</h2>
+            
+            <div class="form-grid">
+                <div>
+                    <h3>Apply for Leave</h3>
+                    <form id="leaveForm">
+                        <div class="form-group">
+                            <label for="leaveEmployee">Employee</label>
+                            <select id="leaveEmployee" required>
+                                <option value="">Select Employee</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="leaveType">Leave Type</label>
+                            <select id="leaveType" required>
+                                <option value="">Select Leave Type</option>
+                                <option value="Sick Leave">Sick Leave</option>
+                                <option value="Casual Leave">Casual Leave</option>
+                                <option value="Annual Leave">Annual Leave</option>
+                                <option value="Maternity Leave">Maternity Leave</option>
+                                <option value="Emergency Leave">Emergency Leave</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="leaveStartDate">Start Date</label>
+                            <input type="date" id="leaveStartDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="leaveEndDate">End Date</label>
+                            <input type="date" id="leaveEndDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="leaveReason">Reason</label>
+                            <textarea id="leaveReason" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Apply Leave</button>
+                    </form>
+                </div>
+            </div>
+
+            <div>
+                <h3>Leave Applications</h3>
+                <div id="leavesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Employee Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Employee</h2>
+            <form id="editEmployeeForm">
+                <input type="hidden" id="editEmpId">
+                <div class="form-group">
+                    <label for="editEmpName">Full Name</label>
+                    <input type="text" id="editEmpName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmpEmail">Email</label>
+                    <input type="email" id="editEmpEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmpPhone">Phone</label>
+                    <input type="tel" id="editEmpPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmpDepartment">Department</label>
+                    <select id="editEmpDepartment" required>
+                        <option value="IT">IT</option>
+                        <option value="HR">HR</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Operations">Operations</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editEmpPosition">Position</label>
+                    <input type="text" id="editEmpPosition" required>
+                </div>
+                <div class="form-group">
+                    <label for="editEmpSalary">Monthly Salary (₹)</label>
+                    <input type="number" id="editEmpSalary" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Employee</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Employee Management System JavaScript
+        class EmployeeManagementSystem {
+            constructor() {
+                this.employees = JSON.parse(localStorage.getItem('employees')) || [];
+                this.leaves = JSON.parse(localStorage.getItem('leaves')) || [];
+                this.salarySlips = JSON.parse(localStorage.getItem('salarySlips')) || [];
+                this.currentTab = 'dashboard';
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.updateDashboard();
+                this.renderEmployees();
+                this.populateEmployeeDropdowns();
+                this.renderLeaves();
+                this.showAlert('System initialized successfully!', 'success');
+            }
+
+            setupEventListeners() {
+                // Tab navigation
+                document.querySelectorAll('.nav-tab').forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        this.switchTab(e.target.dataset.tab);
+                    });
+                });
+
+                // Employee form
+                document.getElementById('employeeForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.addEmployee();
+                });
+
+                // Search functionality
+                document.getElementById('searchEmployee').addEventListener('input', (e) => {
+                    this.searchEmployees(e.target.value);
+                });
+
+                // Salary management
+                document.getElementById('salaryEmployee').addEventListener('change', (e) => {
+                    this.updateSalaryFields(e.target.value);
+                });
+
+                document.getElementById('generateSlip').addEventListener('click', () => {
+                    this.generateSalarySlip();
+                });
+
+                // Leave management
+                document.getElementById('leaveForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.applyLeave();
+                });
+
+                // Modal functionality
+                document.getElementById('editEmployeeForm').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.updateEmployee();
+                });
+
+                document.querySelector('.close').addEventListener('click', () => {
+                    this.closeModal();
+                });
+
+                window.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('modal')) {
+                        this.closeModal();
+                    }
+                });
+            }
+
+            switchTab(tabName) {
+                // Hide all tabs
+                document.querySelectorAll('.tab-content').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.querySelectorAll('.nav-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+
+                // Show selected tab
+                document.getElementById(tabName).classList.add('active');
+                document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+                this.currentTab = tabName;
+
+                // Update content based on tab
+                if (tabName === 'dashboard') {
+                    this.updateDashboard();
+                }
+            }
+
+            addEmployee() {
+                const employee = {
+                    id: Date.now().toString(),
+                    name: document.getElementById('empName').value,
+                    email: document.getElementById('empEmail').value,
+                    phone: document.getElementById('empPhone').value,
+                    department: document.getElementById('empDepartment').value,
+                    position: document.getElementById('empPosition').value,
+                    salary: parseFloat(document.getElementById('empSalary').value),
+                    joinDate: document.getElementById('empJoinDate').value,
+                    status: 'Active'
+                };
+
+                this.employees.push(employee);
+                this.saveData();
+                this.renderEmployees();
+                this.populateEmployeeDropdowns();
+                this.updateDashboard();
+                document.getElementById('employeeForm').reset();
+                this.showAlert('Employee added successfully!', 'success');
+            }
+
+            renderEmployees(employeesToShow = this.employees) {
+                const container = document.getElementById('employeeList');
+                container.innerHTML = '';
+
+                employeesToShow.forEach(employee => {
+                    const card = document.createElement('div');
+                    card.className = 'employee-card';
+                    card.innerHTML = `
+                        <h3>${employee.name}</h3>
+                        <p><strong>Email:</strong> ${employee.email}</p>
+                        <p><strong>Phone:</strong> ${employee.phone}</p>
+                        <p><strong>Department:</strong> ${employee.department}</p>
+                        <p><strong>Position:</strong> ${employee.position}</p>
+                        <p><strong>Salary:</strong> ₹${employee.salary.toLocaleString()}</p>
+                        <p><strong>Join Date:</strong> ${employee.joinDate}</p>
+                        <p><strong>Status:</strong> ${employee.status}</p>
+                        <div class="actions">
+                            <button class="btn btn-primary" onclick="ems.editEmployee('${employee.id}')">Edit</button>
+                            <button class="btn btn-danger" onclick="ems.deleteEmployee('${employee.id}')">Delete</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            searchEmployees(query) {
+                const filtered = this.employees.filter(emp => 
+                    emp.name.toLowerCase().includes(query.toLowerCase()) ||
+                    emp.department.toLowerCase().includes(query.toLowerCase()) ||
+                    emp.position.toLowerCase().includes(query.toLowerCase())
+                );
+                this.renderEmployees(filtered);
+            }
+
+            editEmployee(id) {
+                const employee = this.employees.find(emp => emp.id === id);
+                if (employee) {
+                    document.getElementById('editEmpId').value = employee.id;
+                    document.getElementById('editEmpName').value = employee.name;
+                    document.getElementById('editEmpEmail').value = employee.email;
+                    document.getElementById('editEmpPhone').value = employee.phone;
+                    document.getElementById('editEmpDepartment').value = employee.department;
+                    document.getElementById('editEmpPosition').value = employee.position;
+                    document.getElementById('editEmpSalary').value = employee.salary;
+                    document.getElementById('editModal').style.display = 'block';
+                }
+            }
+
+            updateEmployee() {
+                const id = document.getElementById('editEmpId').value;
+                const employeeIndex = this.employees.findIndex(emp => emp.id === id);
+                
+                if (employeeIndex !== -1) {
+                    this.employees[employeeIndex] = {
+                        ...this.employees[employeeIndex],
+                        name: document.getElementById('editEmpName').value,
+                        email: document.getElementById('editEmpEmail').value,
+                        phone: document.getElementById('editEmpPhone').value,
+                        department: document.getElementById('editEmpDepartment').value,
+                        position: document.getElementById('editEmpPosition').value,
+                        salary: parseFloat(document.getElementById('editEmpSalary').value)
+                    };
+                    
+                    this.saveData();
+                    this.renderEmployees();
+                    this.populateEmployeeDropdowns();
+                    this.updateDashboard();
+                    this.closeModal();
+                    this.showAlert('Employee updated successfully!', 'success');
+                }
+            }
+
+            deleteEmployee(id) {
+                if (confirm('Are you sure you want to delete this employee?')) {
+                    this.employees = this.employees.filter(emp => emp.id !== id);
+                    this.saveData();
+                    this.renderEmployees();
+                    this.populateEmployeeDropdowns();
+                    this.updateDashboard();
+                    this.showAlert('Employee deleted successfully!', 'success');
+                }
+            }
+
+            closeModal() {
+                document.getElementById('editModal').style.display = 'none';
+            }
+
+            populateEmployeeDropdowns() {
+                const salarySelect = document.getElementById('salaryEmployee');
+                const leaveSelect = document.getElementById('leaveEmployee');
+                
+                // Clear existing options
+                salarySelect.innerHTML = '<option value="">Select Employee</option>';
+                leaveSelect.innerHTML = '<option value="">Select Employee</option>';
+                
+                this.employees.forEach(emp => {
+                    const option1 = new Option(emp.name, emp.id);
+                    const option2 = new Option(emp.name, emp.id);
+                    salarySelect.add(option1);
+                    leaveSelect.add(option2);
+                });
+            }
+
+            updateSalaryFields(employeeId) {
+                const employee = this.employees.find(emp => emp.id === employeeId);
+                if (employee) {
+                    document.getElementById('basicSalary').value = employee.salary;
+                }
+            }
+
+            generateSalarySlip() {
+                const employeeId = document.getElementById('salaryEmployee').value;
+                const month = document.getElementById('salaryMonth').value;
+                const basicSalary = parseFloat(document.getElementById('basicSalary').value);
+                const allowances = parseFloat(document.getElementById('allowances').value) || 0;
+                const deductions = parseFloat(document.getElementById('deductions').value) || 0;
+
+                if (!employeeId || !month) {
+                    this.showAlert('Please select employee and month', 'error');
+                    return;
+                }
+
+                const employee = this.employees.find(emp => emp.id === employeeId);
+                const grossSalary = basicSalary + allowances;
+                const netSalary = grossSalary - deductions;
+
+                const salarySlip = {
+                    id: Date.now().toString(),
+                    employeeId,
+                    employeeName: employee.name,
+                    month,
+                    basicSalary,
+                    allowances,
+                    deductions,
+                    grossSalary,
+                    netSalary,
+                    generatedDate: new Date().toISOString().split('T')[0]
+                };
+
+                this.salarySlips.push(salarySlip);
+                this.saveData();
+                this.displaySalarySlip(salarySlip);
+                this.showAlert('Salary slip generated successfully!', 'success');
+            }
+
+            displaySalarySlip(slip) {
+                const container = document.getElementById('salarySlipContainer');
+                const slipHtml = `
+                    <div class="salary-slip">
+                        <h2>Salary Slip</h2>
+                        <div class="salary-details">
+                            <div>
+                                <div class="salary-row">
+                                    <span>Employee Name:</span>
+                                    <span>${slip.employeeName}</span>
+                                </div>
+                                <div class="salary-row">
+                                    <span>Month:</span>
+                                    <span>${slip.month}</span>
+                                </div>
+                                <div class="salary-row">
+                                    <span>Generated Date:</span>
+                                    <span>${slip.generatedDate}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="salary-row">
+                                    <span>Basic Salary:</span>
+                                    <span>₹${slip.basicSalary.toLocaleString()}</span>
+                                </div>
+                                <div class="salary-row">
+                                    <span>Allowances:</span>
+                                    <span>₹${slip.allowances.toLocaleString()}</span>
+                                </div>
+                                <div class="salary-row">
+                                    <span>Gross Salary:</span>
+                                    <span>₹${slip.grossSalary.toLocaleString()}</span>
+                                </div>
+                                <div class="salary-row">
+                                    <span>Deductions:</span>
+                                    <span>₹${slip.deductions.toLocaleString()}</span>
+                                </div>
+                                <div class="salary-row total">
+                                    <span>Net Salary:</span>
+                                    <span>₹${slip.netSalary.toLocaleString()}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button class="btn btn-primary" onclick="window.print()">Print Salary Slip</button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML = slipHtml;
+            }
+
+            applyLeave() {
+                const leave = {
+                    id: Date.now().toString(),
+                    employeeId: document.getElementById('leaveEmployee').value,
+                    employeeName: this.employees.find(emp => emp.id === document.getElementById('leaveEmployee').value)?.name,
+                    leaveType: document.getElementById('leaveType').value,
+                    startDate: document.getElementById('leaveStartDate').value,
+                    endDate: document.getElementById('leaveEndDate').value,
+                    reason: document.getElementById('leaveReason').value,
+                    status: 'Pending',
+                    appliedDate: new Date().toISOString().split('T')[0]
+                };
+
+                this.leaves.push(leave);
+                this.saveData();
+                this.renderLeaves();
+                this.updateDashboard();
+                document.getElementById('leaveForm').reset();
+                this.showAlert('Leave application submitted successfully!', 'success');
+            }
+
+            renderLeaves() {
+                const container = document.getElementById('leavesList');
+                container.innerHTML = '';
+
+                this.leaves.forEach(leave => {
+                    const card = document.createElement('div');
+                    card.className = 'leave-card';
+                    card.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <h4>${leave.employeeName}</h4>
+                                <p><strong>Leave Type:</strong> ${leave.leaveType}</p>
+                                <p><strong>Duration:</strong> ${leave.startDate} to ${leave.endDate}</p>
+                                <p><strong>Reason:</strong> ${leave.reason}</p>
+                                <p><strong>Applied Date:</strong> ${leave.appliedDate}</p>
+                            </div>
+                            <div>
+                                <span class="leave-status ${leave.status.toLowerCase()}">${leave.status}</span>
+                                <div style="margin-top: 10px;">
+                                    ${leave.status === 'Pending' ? `
+                                        <button class="btn btn-success" onclick="ems.updateLeaveStatus('${leave.id}', 'Approved')">Approve</button>
+                                        <button class="btn btn-danger" onclick="ems.updateLeaveStatus('${leave.id}', 'Rejected')">Reject</button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            updateLeaveStatus(leaveId, status) {
+                const leaveIndex = this.leaves.findIndex(leave => leave.id === leaveId);
+                if (leaveIndex !== -1) {
+                    this.leaves[leaveIndex].status = status;
+                    this.saveData();
+                    this.renderLeaves();
+                    this.updateDashboard();
+                    this.showAlert(`Leave ${status.toLowerCase()} successfully!`, 'success');
+                }
+            }
+
+            updateDashboard() {
+                const totalEmployees = this.employees.length;
+                const activeEmployees = this.employees.filter(emp => emp.status === 'Active').length;
+                const totalSalary = this.employees.reduce((sum, emp) => sum + emp.salary, 0);
+                const pendingLeaves = this.leaves.filter(leave => leave.status === 'Pending').length;
+
+                document.getElementById('totalEmployees').textContent = totalEmployees;
+                document.getElementById('activeEmployees').textContent = activeEmployees;
+                document.getElementById('totalSalary').textContent = `₹${totalSalary.toLocaleString()}`;
+                document.getElementById('pendingLeaves').textContent = pendingLeaves;
+            }
+
+            saveData() {
+                localStorage.setItem('employees', JSON.stringify(this.employees));
+                localStorage.setItem('leaves', JSON.stringify(this.leaves));
+                localStorage.setItem('salarySlips', JSON.stringify(this.salarySlips));
+            }
+
+            showAlert(message, type = 'success') {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type}`;
+                alertDiv.textContent = message;
+                
+                const container = document.querySelector('.tab-content.active');
+                container.insertBefore(alertDiv, container.firstChild);
+                
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 3000);
+            }
+
+            // Sample data for demonstration
+            loadSampleData() {
+                if (this.employees.length === 0) {
+                    const sampleEmployees = [
+                        {
+                            id: '1',
+                            name: 'John Doe',
+                            email: 'john.doe@company.com',
+                            phone: '+91-9876543210',
+                            department: 'IT',
+                            position: 'Software Developer',
+                            salary: 50000,
+                            joinDate: '2023-01-15',
+                            status: 'Active'
+                        },
+                        {
+                            id: '2',
+                            name: 'Jane Smith',
+                            email: 'jane.smith@company.com',
+                            phone: '+91-9876543211',
+                            department: 'HR',
+                            position: 'HR Manager',
+                            salary: 60000,
+                            joinDate: '2022-08-20',
+                            status: 'Active'
+                        },
+                        {
+                            id: '3',
+                            name: 'Mike Johnson',
+                            email: 'mike.johnson@company.com',
+                            phone: '+91-9876543212',
+                            department: 'Finance',
+                            position: 'Accountant',
+                            salary: 45000,
+                            joinDate: '2023-03-10',
+                            status: 'Active'
+                        }
+                    ];
+                    
+                    this.employees = sampleEmployees;
+                    this.saveData();
+                    this.renderEmployees();
+                    this.populateEmployeeDropdowns();
+                    this.updateDashboard();
+                    this.showAlert('Sample data loaded successfully!', 'success');
+                }
+            }
+
+            // Export data functionality
+            exportData() {
+                const data = {
+                    employees: this.employees,
+                    leaves: this.leaves,
+                    salarySlips: this.salarySlips
+                };
+                
+                const dataStr = JSON.stringify(data, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'employee_data.json';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                this.showAlert('Data exported successfully!', 'success');
+            }
+
+            // Import data functionality
+            importData(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            this.employees = data.employees || [];
+                            this.leaves = data.leaves || [];
+                            this.salarySlips = data.salarySlips || [];
+                            this.saveData();
+                            this.renderEmployees();
+                            this.populateEmployeeDropdowns();
+                            this.renderLeaves();
+                            this.updateDashboard();
+                            this.showAlert('Data imported successfully!', 'success');
+                        } catch (error) {
+                            this.showAlert('Error importing data. Please check file format.', 'error');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            }
+        }
+
+        // Initialize the Employee Management System
+        const ems = new EmployeeManagementSystem();
+
+        // Add sample data button and export/import functionality to dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            const dashboardContent = document.getElementById('dashboard');
+            const additionalControls = document.createElement('div');
+            additionalControls.innerHTML = `
+                <div style="margin-top: 30px; text-align: center;">
+                    <button class="btn btn-primary" onclick="ems.loadSampleData()">Load Sample Data</button>
+                    <button class="btn btn-success" onclick="ems.exportData()">Export Data</button>
+                    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="ems.importData(event)">
+                    <button class="btn btn-success" onclick="document.getElementById('importFile').click()">Import Data</button>
+                </div>
+            `;
+            dashboardContent.appendChild(additionalControls);
+        });
+
+        // Auto-set current month for salary slip generation
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentDate = new Date();
+            const currentMonth = currentDate.toISOString().slice(0, 7);
+            document.getElementById('salaryMonth').value = currentMonth;
+        });
+
+        // Print styles for salary slip
+        const printStyles = `
+            <style>
+                @media print {
+                    body * {
+                        visibility: hidden;
+                    }
+                    .salary-slip, .salary-slip * {
+                        visibility: visible;
+                    }
+                    .salary-slip {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                    }
+                    .btn {
+                        display: none !important;
+                    }
+                }
+            </style>
+        `;
+        document.head.insertAdjacentHTML('beforeend', printStyles);
+    </script>
+</body>
+</html>

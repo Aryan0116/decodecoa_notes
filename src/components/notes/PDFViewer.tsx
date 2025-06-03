@@ -39,7 +39,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileUrl, fileName = "document.pdf
   const [numPages, setNumPages] = useState<number | null>(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [zoom, setZoom] = useState(1.2);
+  const [zoom, setZoom] = useState(1.0); // Default zoom
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [viewMode, setViewMode] = useState<'page' | 'continuous' | 'double'>('page');
   const [darkMode, setDarkMode] = useState(false);
@@ -56,6 +56,26 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileUrl, fileName = "document.pdf
   const containerRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<HTMLDivElement>(null);
   const pageRefs = useRef<{ [key: number]: HTMLDivElement }>({});
+
+  // Function to get default zoom for view mode
+  const getDefaultZoomForViewMode = (mode: 'page' | 'continuous' | 'double') => {
+    switch (mode) {
+      case 'double':
+        return 0.4; // 40% for double view
+      case 'page':
+        return 1.0; // 100% for page view
+      case 'continuous':
+        return 1.0; // 100% for continuous view
+      default:
+        return 1.0;
+    }
+  };
+
+  // Update zoom when view mode changes
+  useEffect(() => {
+    const defaultZoom = getDefaultZoomForViewMode(viewMode);
+    setZoom(defaultZoom);
+  }, [viewMode]);
 
   // Calculate A4-optimized scale based on container width
   const calculateA4Scale = useCallback(() => {
@@ -117,7 +137,8 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileUrl, fileName = "document.pdf
             break;
           case '0':
             e.preventDefault();
-            setZoom(1.2);
+            // Reset to default zoom for current view mode
+            setZoom(getDefaultZoomForViewMode(viewMode));
             break;
           case 'f':
             e.preventDefault();
@@ -161,7 +182,48 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileUrl, fileName = "document.pdf
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
     };
   }, []);
-
+const handleDownload = async () => {
+  try {
+    // Method 1: Try fetch + blob approach (most reliable)
+    const response = await fetch(fileUrl);
+    const blob = await response.blob();
+    
+    // Create object URL for the blob
+    const blobUrl = URL.createObjectURL(blob);
+    
+    // Create download link
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = fileName;
+    
+    // Ensure the download attribute is respected
+    link.setAttribute('download', fileName);
+    
+    // Add to DOM, click, and remove
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Clean up the object URL
+    URL.revokeObjectURL(blobUrl);
+    
+  } catch (error) {
+    console.error('Download failed:', error);
+    
+    // Fallback method: Direct link approach
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.download = fileName;
+    
+    // Set additional attributes to force download
+    link.setAttribute('download', fileName);
+    link.setAttribute('target', '_self');
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+};
   const toggleFullscreen = () => {
     if (!document.fullscreenElement && containerRef.current) {
       containerRef.current.requestFullscreen().catch(err => {
@@ -207,7 +269,8 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileUrl, fileName = "document.pdf
   }
 
   function resetZoom() {
-    setZoom(1);
+    // Reset to default zoom for current view mode
+    setZoom(getDefaultZoomForViewMode(viewMode));
   }
 
   function rotateClockwise() {
@@ -375,14 +438,6 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileUrl, fileName = "document.pdf
             </div>
           )}
           
-          {/* <button 
-            onClick={() => setIsSearchOpen(!isSearchOpen)}
-            className={`p-2 rounded-md ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}`}
-            title="Search"
-          >
-            <Search size={18} />
-          </button> */}
-          
           <button 
             onClick={() => setIsSettingsOpen(!isSettingsOpen)}
             className={`p-2 rounded-md ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}`}
@@ -438,15 +493,14 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileUrl, fileName = "document.pdf
               <div className="text-xs text-gray-500 mt-1">{pageWidth}px</div>
             </div>
             <div className="flex items-center">
-              {/* <label className="flex items-center">
-                <input 
-                  type="checkbox" 
-                  checked={showThumbnails} 
-                  onChange={(e) => setShowThumbnails(e.target.checked)}
-                  className="mr-2"
-                />
-                Show Thumbnails
-              </label> */}
+              <div className="text-sm">
+                <div className="mb-2">Default Zoom Levels:</div>
+                <div className="text-xs text-gray-500">
+                  • Page: 100%<br/>
+                  • Continuous: 100%<br/>
+                  • Double: 40%
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -459,12 +513,6 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileUrl, fileName = "document.pdf
           <div className={`flex-shrink-0 w-64 border-r ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-gray-50'} overflow-auto`}>
             <div className="p-4">
               <div className="flex gap-2 mb-4">
-                {/* <button
-                  onClick={() => setShowThumbnails(!showThumbnails)}
-                  className={`px-3 py-1 rounded text-sm ${showThumbnails ? (darkMode ? 'bg-blue-700' : 'bg-blue-100') : ''}`}
-                >
-                  Thumbnails
-                </button> */}
                 <button className="px-3 py-1 rounded text-sm">Outline</button>
               </div>
               
@@ -614,7 +662,7 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileUrl, fileName = "document.pdf
                 <button
                   onClick={resetZoom}
                   className={`px-2 py-1 text-sm rounded ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}`}
-                  title="Reset zoom"
+                  title={`Reset zoom (${viewMode === 'double' ? '40%' : '100%'})`}
                 >
                   {Math.round(zoom * 100)}%
                 </button>
@@ -662,17 +710,14 @@ const PDFViewer: React.FC<PDFViewerProps> = ({ fileUrl, fileName = "document.pdf
                   <Copy size={16} />
                 </button>
                 
-                <a
-                  href={fileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  download={fileName}
-                  className={`flex items-center gap-1 px-3 py-1 rounded-md ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}`}
-                  title="Download PDF"
-                >
-                  <Download size={16} />
-                  <span className="text-sm hidden sm:inline">Download</span>
-                </a>
+                <button
+  onClick={handleDownload}
+  className={`flex items-center gap-1 px-3 py-1 rounded-md ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}`}
+  title="Download PDF"
+>
+  <Download size={16} />
+  <span className="text-sm hidden sm:inline">Download</span>
+</button>
                 
                 <a 
                   href={fileUrl} 

@@ -1,73 +1,52 @@
-# Welcome to your Lovable project
+# DecodeCOA Notes
 
-## Project info
+A powerful and intuitive notes sharing platform that's part of the [DECODE COA](https://aryan0116.github.io/DECODE-CO-A/) ecosystem.
 
-**URL**: https://lovable.dev/projects/d0c17f6c-b7e5-44c6-a6aa-8a5adc4501bc
+🔗 **Access the app**: [decodecoa-notes.vercel.app](https://decodecoa-notes.vercel.app/)
 
-## How can I edit this code?
+## Overview
 
-There are several ways of editing your application.
+DecodeCOA Notes is a comprehensive note-taking and sharing application designed to enhance collaborative learning and knowledge sharing. Built as a unit of DECODE COA, it provides students and professionals with a seamless platform to upload, organize, and access notes efficiently.
 
-**Use Lovable**
+## Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/d0c17f6c-b7e5-44c6-a6aa-8a5adc4501bc) and start prompting.
+### 📝 Note Management
+- **Upload Notes**: Easily upload your notes in various formats
+- **Read & View**: Clean, user-friendly interface for reading notes
+- **Bookmark System**: Save important notes for quick access later
+- **Note Sharing**: Share your notes with others in the community
 
-Changes made via Lovable will be committed automatically to this repo.
+### 🔖 Organization
+- Bookmark favorite notes for instant retrieval
+- Categorize and organize your note collection
+- Search and filter through uploaded content
 
-**Use your preferred IDE**
+### 🌐 Community Features
+- Access notes shared by other users
+- Build a collaborative knowledge base
+- Connect with the broader DECODE COA learning community
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## About DECODE COA
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+This application is part of the larger DECODE COA initiative, a comprehensive platform dedicated to coding education and skill development. Visit the main platform at [aryan0116.github.io/DECODE-CO-A/](https://aryan0116.github.io/DECODE-CO-A/) to explore more educational resources and tools.
 
-Follow these steps:
+## Getting Started
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+1. Visit [decodecoa-notes.vercel.app](https://decodecoa-notes.vercel.app/)
+2. Start uploading your notes or browse existing ones
+3. Use the bookmark feature to save notes you want to revisit
+4. Share your knowledge with the community
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## Technology Stack
 
-# Step 3: Install the necessary dependencies.
-npm i
+- Frontend: Modern web technologies for responsive design
+- Cloud Storage: Secure file handling and management
+- Real-time Features: Instant note sharing and updates
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## Support
 
-**Edit a file directly in GitHub**
+For support, feedback, or questions about DecodeCOA Notes, please refer to the main DECODE COA platform or reach out through the provided channels.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+---
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/d0c17f6c-b7e5-44c6-a6aa-8a5adc4501bc) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+*DecodeCOA Notes - Empowering collaborative learning through shared knowledge.*
